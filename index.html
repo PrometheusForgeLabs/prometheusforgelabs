@@ -14,20 +14,27 @@
       overflow-x: hidden;
       position: relative;
     }
+    .disable {
+      display: block;
+    }
+
     .header {
       text-align: center;
-      padding: 10px;
+      padding: 20px;
       background: rgba(0, 0, 0, 0.5);
       position: relative;
       z-index: 1;
     }
+    .header p.small {
+        font-size: 0.7em;
+      }
     .header h1 {
       margin: 0;
       font-size: 1.5em; /* Reduced from 2.5em for mobile */
     }
     .header p {
       margin: 5px 0;
-      font-size: 0.9em; /* Reduced for mobile readability */
+      font-size: 0.8em; /* Reduced for mobile readability */
     }
     .canvas-bg {
       position: fixed;
@@ -50,15 +57,21 @@
       font-size: 1em;
     }
     @media (min-width: 768px) {
+      .disable {
+      display: none;
+      }
       .header {
-          padding: 20 20 20 20;
+          padding-right: 25px;
           text-align: right;
       }
       .header h1 {
         font-size: 2em; /* Revert to original for desktop */
       }
       .header p {
-        font-size: 0.8em; /* Revert to original for desktop */
+        font-size: 1em; /* Revert to original for desktop */
+      }
+      .header p.small {
+        font-size: 0.8em;
       }
       .content h2 {
         font-size: 1.8em; /* Revert to original for desktop */
@@ -71,7 +84,7 @@
   <div class="header">
     <h1>PROMETHEUS FORGE LABS</h1>
     <p>INNOVATING TECHNOLOGY | SECURING FUTURES</p>
-    <p>Executive IT Professional | Full Stack Development, IT Operations & Cybersecurity Leadership</p>
+    <p class="small">Executive IT Professional | Full Stack Development, <br class="disable"> IT Operations & Cybersecurity Leadership</p>
   </div>
   <div class="content">
     <h2>Welcome to My Vision</h2>
