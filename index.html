@@ -80,16 +80,36 @@
   <script>
     const canvas = document.querySelector('.canvas-bg');
     const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+
+    function getParticleSettings() {
+      // Scale number of particles and connection distance with screen size
+      const area = window.innerWidth * window.innerHeight;
+      let numParticles = Math.floor(area / 4000); // ~100 for mobile, ~300+ for desktop
+      numParticles = Math.max(80, Math.min(numParticles, 350)); // Clamp for performance
+      let connectDist = window.innerWidth > 1000 ? 160 : 100;
+      return { numParticles, connectDist };
+    }
 
     function createParticle(x, y) {
       return { x, y, vx: Math.random() - 0.5, vy: Math.random() - 0.5, size: Math.random() * 2 + 1 };
     }
 
-    const particles = [];
-    for (let i = 0; i < 100; i++) {
-      particles.push(createParticle(Math.random() * canvas.width, Math.random() * canvas.height));
+    let particles = [];
+    let connectDist = 100;
+
+    function initParticles() {
+      const settings = getParticleSettings();
+      particles = [];
+      connectDist = settings.connectDist;
+      for (let i = 0; i < settings.numParticles; i++) {
+        particles.push(createParticle(Math.random() * canvas.width, Math.random() * canvas.height));
+      }
+    }
+
+    function resizeCanvasAndParticles() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      initParticles();
     }
 
     let wormhole = null;
@@ -120,7 +140,7 @@
             const dx = p.x - p2.x;
             const dy = p.y - p2.y;
             const dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < 100) {
+            if (dist < connectDist) {
               ctx.beginPath();
               ctx.moveTo(p.x, p.y);
               ctx.lineTo(p2.x, p2.y);
@@ -151,6 +171,8 @@
 
       requestAnimationFrame(animate);
     }
+
+    resizeCanvasAndParticles();
     animate();
 
     document.body.addEventListener('click', (e) => {
@@ -162,10 +184,7 @@
       }
     });
 
-    window.addEventListener('resize', () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
+    window.addEventListener('resize', resizeCanvasAndParticles);
   </script>
 </body>
 </html>
