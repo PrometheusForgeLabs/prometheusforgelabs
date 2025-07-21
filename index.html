@@ -15,13 +15,19 @@
     }
     .header {
       text-align: right;
-      padding: 20px;
+      padding: 10px;
       background: rgba(0, 0, 0, 0.5);
       position: relative;
       z-index: 1;
     }
-    .header h1 { margin: 0; font-size: 2.5em; }
-    .header p { margin: 5px 0; }
+    .header h1 {
+      margin: 0;
+      font-size: 1.5em; /* Reduced from 2.5em for mobile */
+    }
+    .header p {
+      margin: 5px 0;
+      font-size: 0.9em; /* Reduced for mobile readability */
+    }
     .canvas-bg {
       position: fixed;
       top: 0;
@@ -31,12 +37,28 @@
       z-index: 0;
     }
     .content {
-      padding: 50px 20px;
+      padding: 20px;
       text-align: center;
       position: relative;
       z-index: 1;
     }
-    .content h2 { font-size: 2em; }
+    .content h2 {
+      font-size: 1.5em; /* Adjusted for mobile consistency */
+    }
+    .content p {
+      font-size: 1em;
+    }
+    @media (min-width: 768px) {
+      .header h1 {
+        font-size: 2.5em; /* Revert to original for desktop */
+      }
+      .header p {
+        font-size: 1em; /* Revert to original for desktop */
+      }
+      .content h2 {
+        font-size: 2em; /* Revert to original for desktop */
+      }
+    }
   </style>
 </head>
 <body>
@@ -72,7 +94,7 @@
       return {
         x, y,
         radius: 0,
-        maxRadius: 45, // 150% larger as per previous update
+        maxRadius: 45,
         growing: true,
         alpha: 1
       };
@@ -105,7 +127,6 @@
         });
       });
 
-      // Draw Wormhole
       if (wormhole) {
         ctx.beginPath();
         const gradient = ctx.createRadialGradient(wormhole.x, wormhole.y, 0, wormhole.x, wormhole.y, wormhole.radius);
@@ -132,7 +153,6 @@
       const rect = canvas.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-      // Check if click is within canvas bounds
       if (x >= 0 && x <= canvas.width && y >= 0 && y <= canvas.height) {
         wormhole = createWormhole(x, y);
       }
