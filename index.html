@@ -81,6 +81,23 @@
 </head>
 <body>
   <canvas class="canvas-bg"></canvas>
+  <!-- Thin top bar with animated arrow -->
+  <div class="top-menu-bar" id="topMenuBar">
+    <svg class="menu-arrow" width="38" height="18" viewBox="0 0 38 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polyline points="2,4 19,15 36,4" stroke="#0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="19" cy="15" r="1.5" fill="#0ff" opacity="0.7"/>
+    </svg>
+  </div>
+  <!-- Dropdown menu -->
+  <nav class="dropdown-menu" id="dropdownMenu">
+    <button class="close-dropdown" id="closeDropdown">&times;</button>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Projects</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
   <div class="header">
     <h1>PROMETHEUS FORGE LABS</h1>
     <p>INNOVATING TECHNOLOGY | SECURING FUTURES</p>
@@ -198,6 +215,146 @@
     });
 
     window.addEventListener('resize', resizeCanvasAndParticles);
+  </script>
+  <style>
+    .top-menu-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 28px;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      cursor: pointer;
+      transition: background 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .top-menu-bar:hover {
+      background: #122b4d;
+    }
+    .menu-arrow {
+      display: block;
+      stroke: #0ff;
+      filter: drop-shadow(0 0 2px #0ff2);
+      animation: arrowFloat 1.8s ease-in-out infinite;
+    }
+    @keyframes arrowFloat {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(5px) scaleX(1.08); }
+      100% { transform: translateY(0); }
+    }
+    .dropdown-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      background: rgba(10, 20, 40, 0.98);
+      color: #fff;
+      z-index: 2100;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+      transform: translateY(-100%);
+      transition: transform 0.35s cubic-bezier(.77,0,.18,1);
+      padding-top: 32px;
+      padding-bottom: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .dropdown-menu.open {
+      transform: translateY(0);
+    }
+    .dropdown-menu ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .dropdown-menu li {
+      margin: 18px 0;
+    }
+    .dropdown-menu a {
+      color: #0ff;
+      text-decoration: none;
+      font-size: 1.2em;
+      transition: color 0.2s;
+    }
+    .dropdown-menu a:hover {
+      color: #fff;
+    }
+    .close-dropdown {
+      position: absolute;
+      top: 6px;
+      right: 18px;
+      background: none;
+      border: none;
+      color: #0ff;
+      font-size: 2em;
+      cursor: pointer;
+      z-index: 2200;
+    }
+    .header {
+      margin-top: 28px; /* push header below menu bar */
+    }
+    @media (max-width: 600px) {
+      .top-menu-bar {
+        height: 24px;
+      }
+      .menu-arrow {
+        width: 28px;
+        height: 13px;
+      }
+      .dropdown-menu {
+        padding-top: 28px;
+        padding-bottom: 20px;
+      }
+      .dropdown-menu a {
+        font-size: 1em;
+      }
+    }
+  </style>
+  <script>
+    // Remove old menu elements if present
+    const oldTrigger = document.getElementById('menuTrigger');
+    const oldSideMenu = document.getElementById('sideMenu');
+    if (oldTrigger) oldTrigger.remove();
+    if (oldSideMenu) oldSideMenu.remove();
+
+    const topMenuBar = document.getElementById('topMenuBar');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    const closeDropdown = document.getElementById('closeDropdown');
+    let menuOpen = false;
+    function openMenu() {
+      dropdownMenu.classList.add('open');
+      menuOpen = true;
+    }
+    function closeMenu() {
+      dropdownMenu.classList.remove('open');
+      menuOpen = false;
+    }
+    topMenuBar.addEventListener('click', () => {
+      if (menuOpen) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    });
+    closeDropdown.addEventListener('click', closeMenu);
+    // Optional: close menu on click outside
+    document.addEventListener('click', (e) => {
+      if (
+        menuOpen &&
+        !dropdownMenu.contains(e.target) &&
+        !topMenuBar.contains(e.target)
+      ) {
+        closeMenu();
+      }
+    });
+    // Prevent menu close when clicking inside
+    dropdownMenu.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
   </script>
 </body>
 </html>
